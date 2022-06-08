@@ -1,0 +1,42 @@
+{
+    "weight_decay": [
+        0.0
+    ],
+    "hidden": [
+        128,
+        256
+    ],
+    "dropout": [
+        0.0,
+        0.1,
+        0.2
+    ],
+    "lr": [
+        0.1,
+        0.01,
+        0.002
+    ],
+    "heads": [
+        8
+    ],
+    "output_heads": [
+        1
+    ],
+    "walk_length": [
+        2,
+        4
+    ],
+    "sample_coverage": [
+        50
+    ],
+    "root": [
+        1500,
+        2000
+    ],
+    "epochs": [
+        300
+    ],
+    "early_stopping": [
+        40
+    ]
+}

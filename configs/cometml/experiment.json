@@ -1,0 +1,30 @@
+{
+    "algorithm": "grid",
+    "spec": {
+        "randomize": false,
+        "maxCombo": 0,
+        "metric": "test_acc",
+        "gridSize": 10,
+        "minSampleSize": 100,
+        "retryLimit": 20,
+        "retryAssignLimit": 0
+    },
+    "parameters": {
+        "lr": {
+            "type": "discrete",
+            "values": [
+                0.1,
+                0.01
+            ]
+        },
+        "hidden": {
+            "type": "discrete",
+            "values": [
+                4,
+                8
+            ]
+        }
+    },
+    "name": "My Grid Search",
+    "trials": 1
+}

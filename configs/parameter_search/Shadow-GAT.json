@@ -1,0 +1,43 @@
+{
+    "weight_decay": [
+        0.0
+    ],
+    "hidden": [
+        128,
+        256
+    ],
+    "dropout": [
+        0.0,
+        0.1,
+        0.2
+    ],
+    "lr": [
+        0.1,
+        0.01,
+        0.002
+    ],
+    "heads": [
+        8
+    ],
+    "output_heads": [
+        1
+    ],
+    "batch_size": [
+        64,
+        128
+    ],
+    "depth": [
+        2
+    ],
+    "num_neighbors": [
+        5,
+        10,
+        20
+    ],
+    "epochs": [
+        200
+    ],
+    "early_stopping": [
+        40
+    ]
+}
