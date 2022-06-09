@@ -100,10 +100,7 @@ def RunExp(args, dataset, data, Net, percls_trn, val_lb):
         elif "Shadow" in args.net:
             model.train()
             total_loss = total_examples = 0
-            # t_ = perf_counter()
             for mini_data in train_loader_for_training:
-                # print("#time", perf_counter() - t_)
-                # t1_ = perf_counter()
                 mini_data = mini_data.to(DEVICE)
                 optimizer.zero_grad()
                 out = model(mini_data)
@@ -114,9 +111,6 @@ def RunExp(args, dataset, data, Net, percls_trn, val_lb):
                 optimizer.step()
                 total_loss += float(loss) * mini_data.num_graphs
                 total_examples += mini_data.num_graphs
-                # print("#time1", perf_counter() - t_)
-            # print("#total time", perf_counter() - t_)
-            # raise ValueError
             _ = total_loss / total_examples
         else:
             model.train()
@@ -236,18 +230,15 @@ def RunExp(args, dataset, data, Net, percls_trn, val_lb):
     best_val_loss = float('inf')
     val_loss_history = []
     val_acc_history = []
-    t = perf_counter()  # 計測開始
+    t = perf_counter()  # Start measuring time
 
     for epoch in range(args.epochs):
-        # t_ = perf_counter()
         train(model, optimizer, data, args.dprate)
-        # print("train_time", perf_counter() - t_)
-        # t_ = perf_counter()
+
         [tmp_train_acc, val_acc, tmp_test_acc], preds, [
             train_loss, val_loss, tmp_test_loss], [
             tmp_train_f1_micro, tmp_val_f1_micro, tmp_test_f1_micro], [
                 tmp_train_f1_macro, tmp_val_f1_macro, tmp_test_f1_macro] = test(model, data)
-        # print("test_time", perf_counter() - t_)
 
         if val_loss < best_val_loss:
             train_acc = tmp_train_acc
@@ -341,7 +332,6 @@ def main(args, experiment=None):
 
     metrics = {}
     for RP in tqdm(range(RPMAX)):
-        # t1 = perf_counter()
         test_acc, best_val_acc, train_acc, test_f1_micro, val_f1_micro, train_f1_micro, test_f1_macro, val_f1_macro, train_f1_macro, num_epoch, Gamma_0, total_time = RunExp(
             args, dataset, data, Net, percls_trn, val_lb)
         total_time = total_time + precompute_time
@@ -473,10 +463,6 @@ if __name__ == '__main__':
                         choices=['last', 'cat', 'max', 'lstm'])
     parser.add_argument('--layers', type=int, default=2)
 
-    # parser.add_argument('--layers_1', type=list, default=[200, 200, 200])  # MixHop
-    # parser.add_argument('--layers_2', type=list, default=[200, 200, 200])  # MixHop
-    # parser.add_argument('--lambd', type=float, default=0.0005)  # MixHop
-
     parser.add_argument('--nhop', type=int, default=2)  # H2GCN
 
     parser.add_argument('--kernel_size', type=int, default=16)  # MoNet
@@ -557,26 +543,17 @@ if __name__ == '__main__':
             # if "scalability" in args.exp or args.conditional:
             #     df = pd.read_csv(f"{best_params_file}_conditional.csv")
             if args.full_search_params:
-                if "scalability" in args.exp:
-                    df = pd.read_csv(
-                        f"{best_params_dir}/full_hyperparameter_search/best_params_supervised4_f1macro_scalability.csv")
-                else:
-                    df = pd.read_csv(
-                        f"{best_params_dir}/full_hyperparameter_search/best_params_supervised2_f1macro.csv")
+                df = pd.read_csv(
+                    f"{best_params_dir}/full_hyperparameter_search/best_params_supervised_f1macro.csv")
+
                 df = df.query("exp == @args.exp")
             else:
                 df = pd.read_csv(f"{best_params_file}.csv")
 
             if args.full_search_params:
-                # convert GenCAT_cora_*_[012] into GenCAT_cora_*_0
+                # convert GenCAT_cora_*_[012] to GenCAT_cora_*_0
                 dataset = args.dataset[:-1] + "0"
-                # if "scalability" in args.exp:
-                #     # dataset = "GenCAT_cora_6000_10000_2"
-                #     dataset = args.dataset[:-1] + "0"
 
-                # else:
-                #     # GenCAT_cora_*_[012]→GenCAT_cora_*_0へ変換
-                #     dataset = args.dataset[:-1] + "0"
             else:
                 dataset = args.dataset.split("_")[1] if "GenCAT" in args.dataset else args.dataset
             net = args.net.split("-")[1] if "JK-" in args.net else args.net
