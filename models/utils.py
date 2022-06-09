@@ -6,9 +6,19 @@ from scipy import sparse
 
 from torch_geometric.utils import degree
 
-# DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-DEVICE = torch.device('cpu')
+DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+# torch.cuda.set_device(1)
+# DEVICE = torch.device('cpu')
 SEED = 42
+
+
+def dense2sparseTensor(adj):
+    adj_coo = adj.to('cpu').to_sparse()
+    adj = torch.sparse.FloatTensor(
+        torch.stack([adj_coo.indices()[0], adj_coo.indices()[1]]).to(DEVICE),
+        adj_coo.values().to(DEVICE),
+        adj.shape)
+    return adj
 
 
 def fix_seed(seed=SEED):
@@ -63,16 +73,18 @@ def random_planetoid_splits(data, num_classes, percls_trn=20, val_lb=500, Flag=0
 
 
 def hgcn_precompute(n, edge_index, nhop=2):
+    # DEVICE = torch.device('cpu')
     t = perf_counter()
     # convert edge_index to sparse matrix of torch
-    adj = torch.sparse_coo_tensor(edge_index, torch.ones(
-        edge_index.shape[1]), (n, n)).float().to(DEVICE)
     # adj = torch.sparse_coo_tensor(edge_index, torch.ones(
-    #     edge_index.shape[1]), (n, n)).float()
+    # edge_index.shape[1]), (n, n)).float().to(DEVICE)
+    adj = torch.sparse_coo_tensor(edge_index, torch.ones(
+        edge_index.shape[1]), (n, n)).float()
     # remove self-loop
-    adj = remove_selfloop(adj)
+    adj = remove_selfloop(adj).to(DEVICE)
     adj = normalization(adj)
-    S = [adj]
+    # adj = dense2sparseTensor(adj)
+    S = [dense2sparseTensor(adj)]
     for i in range(1, nhop):
         # 2-hop neighbor
         S.append(torch.spmm(S[i - 1], adj))  # compute exact (i+1)-hop neighbor
@@ -83,7 +95,7 @@ def hgcn_precompute(n, edge_index, nhop=2):
             S[i] = S[i] - S[j]  # remove connection within nhop-1 to get exact nhop neighbor
         S[i][S[i] < 0] = 0
         # normalization
-        S[i] = normalization(S[i].to_sparse()).to(DEVICE)
+        S[i] = normalization(S[i].to_sparse().to(DEVICE))
         # S[i] = normalization(S[i].to_sparse())
     precompute_time = perf_counter() - t
     return S, precompute_time
@@ -91,12 +103,16 @@ def hgcn_precompute(n, edge_index, nhop=2):
 
 def normalization(adj):
     degrees = torch.sparse.sum(adj, dim=0).to_dense()
+    # adj = adj.to(DEVICE)
     D = torch.pow(degrees, -0.5).to(DEVICE)
     # D = torch.pow(degrees, -0.5)
     D = torch.nan_to_num(D, nan=0.0, posinf=0.0)
     D = torch.diag(D)
-    adj = torch.spmm(D, torch.spmm(adj, D))
-    return adj
+    adj_out = torch.spmm(adj, D)
+    D = D.to('cpu').to_sparse().to(DEVICE)
+    adj_out = torch.spmm(D, adj_out)
+    torch.cuda.empty_cache()
+    return adj_out
 
 
 def add_selfloop(adj):
@@ -119,12 +135,14 @@ def sgc_precompute(features, edge_index, degree=2):
     t = perf_counter()
     n = features.shape[0]
     # convert edge_index to sparse matrix of torch
+    # adj = torch.sparse_coo_tensor(edge_index, torch.ones(
+    #     edge_index.shape[1]), (n, n)).float().to(DEVICE)
     adj = torch.sparse_coo_tensor(edge_index, torch.ones(
-        edge_index.shape[1]), (n, n)).float().to(DEVICE)
-
+        edge_index.shape[1]), (n, n)).float()
     # add self-loop
-    adj = add_selfloop(adj)
+    adj = add_selfloop(adj).to(DEVICE)
     adj = normalization(adj)
+    adj = dense2sparseTensor(adj)
     for i in range(degree):
         features = torch.spmm(adj, features.to(DEVICE))
     precompute_time = perf_counter() - t
@@ -153,15 +171,18 @@ def fsgnn_precompute(features, edge_index, nhop):
     t = perf_counter()
     n = features.shape[0]
     # convert edge_index to sparse matrix of torch
-    adj = torch.sparse_coo_tensor(edge_index.to(DEVICE), torch.ones(
-        edge_index.shape[1]).to(DEVICE), (n, n)).float()
+    adj = torch.sparse_coo_tensor(edge_index, torch.ones(
+        edge_index.shape[1]), (n, n)).float()
     # remove self-loop
-    adj_i = remove_selfloop(adj)
+    adj_i = remove_selfloop(adj).to(DEVICE)
+    adj_i = normalization(adj_i).to('cpu')  # normalization
+    adj_i = dense2sparseTensor(adj_i)
+    torch.cuda.empty_cache()
     # add self-loop
-    adj = add_selfloop(adj)
-    # normalization
-    adj = normalization(adj)
-    adj_i = normalization(adj_i)
+    adj_ = add_selfloop(adj).to(DEVICE)
+    adj_ = normalization(adj_).to('cpu')  # normalization
+    adj_ = dense2sparseTensor(adj_)
+    torch.cuda.empty_cache()
     # adj = adj.coo()
     # adj_i = adj_i.coo()
     features = features.to(DEVICE)
@@ -170,7 +191,7 @@ def fsgnn_precompute(features, edge_index, nhop):
     tmp = features
     tmp_i = features
     for _ in range(nhop):
-        tmp = torch.spmm(adj, tmp)
+        tmp = torch.spmm(adj_, tmp)
         SX.append(tmp)
         tmp_i = torch.spmm(adj_i, tmp_i)
         SX.append(tmp_i)
@@ -192,8 +213,6 @@ def preprocess_features(features):
 def create_adjacency_matrix(edge_index):
     """
     Creating a sparse adjacency matrix.
-    :param graph: NetworkX object.
-    :return A: Adjacency matrix.
     """
     # index_1 = [edge[0] for edge in graph.edges()] + [edge[1] for edge in graph.edges()]
     # index_2 = [edge[1] for edge in graph.edges()] + [edge[0] for edge in graph.edges()]
@@ -215,8 +234,8 @@ def create_adjacency_matrix(edge_index):
 
 def feature_reader(features):
     """
-    Reading the feature matrix stored as JSON from the disk.
-    :param path: Path to the JSON file.
+    Reading the feature matrix.
+    :param features: Feature matrix.
     :return out_features: Dict with index and value tensor.
     """
     # features = json.load(open(path))
