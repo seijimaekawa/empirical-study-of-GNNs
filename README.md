@@ -1,25 +1,8 @@
 # Beyond Real-world Benchmark Datasets: An Empirical Study of Node Classification with GNNs
 
-# Supported models and datasets
+# Supported models
 
-- Built-in methods: [GCN](https://github.com/tkipf/pygcn), MLP, [GAT](https://github.com/PetarV-/GAT), [GraphSAGE](http://snap.stanford.edu/graphsage/), [ChebNet](https://arxiv.org/abs/1606.09375), [SGC](https://arxiv.org/abs/1902.07153), [H2GCN](https://arxiv.org/abs/2006.11468), [MoNet](https://arxiv.org/abs/1611.08402), [GPRGNN](https://github.com/jianhao2016/GPRGNN), [FSGNN](https://arxiv.org/abs/2105.07634), [JK-GCN](https://arxiv.org/abs/1806.03536),[JK-GAT](https://arxiv.org/abs/1806.03536), [JK-GraphSAGE](https://arxiv.org/abs/1806.03536), [GraphSAINT-GAT](https://arxiv.org/abs/1907.04931), [GraphSAINT-GraphSAGE](https://arxiv.org/abs/1907.04931), [Shadow-GAT](https://github.com/facebookresearch/shaDow_GNN), [Shadow-GraphSAGE](https://github.com/facebookresearch/shaDow_GNN)
-
-- Built-in datasets:
-
-  | Dataset                                                 | # Nodes | # Edges |
-  | ------------------------------------------------------- | ------- | ------- |
-  | [Cora](https://github.com/kimiyoung/planetoid)          | 2,708   | 5,278   |
-  | [Citeseer](https://github.com/kimiyoung/planetoid)      | 3,327   | 4,552   |
-  | [Pubmed](https://github.com/kimiyoung/planetoid)        | 19,717  | 44,324  |
-  | [Cornell](https://openreview.net/forum?id=S1e2agrFvS)   | 183     | 277     |
-  | [Texas](https://openreview.net/forum?id=S1e2agrFvS)     | 183     | 279     |
-  | [Wisconsin](https://openreview.net/forum?id=S1e2agrFvS) | 251     | 499     |
-  | [Actor](https://openreview.net/forum?id=S1e2agrFvS)     | 7,600   | 26,659  |
-  | [Chameleon](https://arxiv.org/abs/1909.13021)           | 2,277   | 31,371  |
-  | [Squirrel](https://arxiv.org/abs/1909.13021)            | 5,201   | 198,353 |
-  | [BlogCatalog](http://snap.stanford.edu/node2vec/)       | 5,196   | 343,486 |
-  | [Flickr](https://arxiv.org/abs/2009.00826)              | 7,575   | 479,476 |
-  | [Wiki](https://github.com/GRAND-Lab/MGAE)               | 2,405   | 17,981  |
+[GCN](https://github.com/tkipf/pygcn), MLP, [GAT](https://github.com/PetarV-/GAT), [GraphSAGE](http://snap.stanford.edu/graphsage/), [ChebNet](https://arxiv.org/abs/1606.09375), [SGC](https://arxiv.org/abs/1902.07153), [H2GCN](https://arxiv.org/abs/2006.11468), [MoNet](https://arxiv.org/abs/1611.08402), [GPRGNN](https://github.com/jianhao2016/GPRGNN), [FSGNN](https://arxiv.org/abs/2105.07634), [JK-GCN](https://arxiv.org/abs/1806.03536),[JK-GAT](https://arxiv.org/abs/1806.03536), [JK-GraphSAGE](https://arxiv.org/abs/1806.03536), [GraphSAINT-GAT](https://arxiv.org/abs/1907.04931), [GraphSAINT-GraphSAGE](https://arxiv.org/abs/1907.04931), [Shadow-GAT](https://github.com/facebookresearch/shaDow_GNN), [Shadow-GraphSAGE](https://github.com/facebookresearch/shaDow_GNN)
 
 # Dataset Generation(GenCAT)
 
@@ -29,6 +12,9 @@ Dataset generated with pre-set parameters will be saved under the `data` directo
 ```
 python scripts/run_gencat.py --dataset cora
 ```
+
+You can download synthetic datasets that we use in the paper: 
+[dataset link](https://drive.google.com/file/d/1B7X65BoPij8sEmL491T-LDlzrm5aATRH/view?usp=sharing)
 
 # Run GNN
 
@@ -74,3 +60,20 @@ python train_model.py --train_rate 0.6 --val_rate 0.2 --RPMAX 10 --dataset cora 
 
 One way to use the best parameter set you explored is to add it in `./configs/best_params/best_params_supervised.csv` as a new row. If there is a line in the file with a matching dataset/net combination, then you can run `./models/train_model.py` using the best parameters without setting the best parameters as arguments.
 You can also choose to set the best parameters as arguments when running the code.
+
+# Built-in datasets
+
+  | Dataset                                                 | # Nodes | # Edges |
+  | ------------------------------------------------------- | ------- | ------- |
+  | [Cora](https://github.com/kimiyoung/planetoid)          | 2,708   | 5,278   |
+  | [Citeseer](https://github.com/kimiyoung/planetoid)      | 3,327   | 4,552   |
+  | [Pubmed](https://github.com/kimiyoung/planetoid)        | 19,717  | 44,324  |
+  | [Cornell](https://openreview.net/forum?id=S1e2agrFvS)   | 183     | 277     |
+  | [Texas](https://openreview.net/forum?id=S1e2agrFvS)     | 183     | 279     |
+  | [Wisconsin](https://openreview.net/forum?id=S1e2agrFvS) | 251     | 499     |
+  | [Actor](https://openreview.net/forum?id=S1e2agrFvS)     | 7,600   | 26,659  |
+  | [Chameleon](https://arxiv.org/abs/1909.13021)           | 2,277   | 31,371  |
+  | [Squirrel](https://arxiv.org/abs/1909.13021)            | 5,201   | 198,353 |
+  | [BlogCatalog](http://snap.stanford.edu/node2vec/)       | 5,196   | 343,486 |
+  | [Flickr](https://arxiv.org/abs/2009.00826)              | 7,575   | 479,476 |
+  | [Wiki](https://github.com/GRAND-Lab/MGAE)               | 2,405   | 17,981  |
