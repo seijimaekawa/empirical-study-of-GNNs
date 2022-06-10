@@ -16,6 +16,8 @@ python scripts/run_gencat.py --dataset cora
 You can download synthetic datasets that we use in the paper: 
 [dataset link](https://drive.google.com/file/d/1B7X65BoPij8sEmL491T-LDlzrm5aATRH/view?usp=sharing)
 
+Please put the unzipped folder as `./data/`.
+
 # Reproduction of Experiments in the Paper
 All plots in Figure 1-6 are shown in a [notebook](https://github.com/seijimaekawa/empirical-study-of-GNNs/blob/main/notebooks/final_plots.ipynb). 
 
