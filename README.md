@@ -1,10 +1,10 @@
 # Beyond Real-world Benchmark Datasets: An Empirical Study of Node Classification with GNNs
 
-# Supported models
+# Supported Models
 
 [GCN](https://github.com/tkipf/pygcn), MLP, [GAT](https://github.com/PetarV-/GAT), [GraphSAGE](http://snap.stanford.edu/graphsage/), [ChebNet](https://arxiv.org/abs/1606.09375), [SGC](https://arxiv.org/abs/1902.07153), [H2GCN](https://arxiv.org/abs/2006.11468), [MoNet](https://arxiv.org/abs/1611.08402), [GPRGNN](https://github.com/jianhao2016/GPRGNN), [FSGNN](https://arxiv.org/abs/2105.07634), [JK-GCN](https://arxiv.org/abs/1806.03536),[JK-GAT](https://arxiv.org/abs/1806.03536), [JK-GraphSAGE](https://arxiv.org/abs/1806.03536), [GraphSAINT-GAT](https://arxiv.org/abs/1907.04931), [GraphSAINT-GraphSAGE](https://arxiv.org/abs/1907.04931), [Shadow-GAT](https://github.com/facebookresearch/shaDow_GNN), [Shadow-GraphSAGE](https://github.com/facebookresearch/shaDow_GNN)
 
-# Dataset Generation(GenCAT)
+# Dataset Generation (GenCAT)
 
 Choose a base dataset and Generate dataset with GenCAT. If the base dataset is not in your directory, it will be downloaded automatically.
 Dataset generated with pre-set parameters will be saved under the `data` directory.
@@ -25,7 +25,7 @@ Please go to folder `models`
 python train_model.py --train_rate 0.6 --val_rate 0.2 --RPMAX 2 --dataset cora --net GCN
 ```
 
-# Format dataset
+# Format of Datasets
 
 Although all the dataset are internally converted to pytorch format, you can convert the dataset format into another format so that you can use the datasets for your use case. The converted data will be stored in the dataset's directory. The selectable formats are npz, [semb](https://github.com/gemslab/strucEmbedding-graphlibrary), and [planetoid](https://github.com/kimiyoung/planetoid).
 
@@ -61,7 +61,7 @@ python train_model.py --train_rate 0.6 --val_rate 0.2 --RPMAX 10 --dataset cora 
 One way to use the best parameter set you explored is to add it in `./configs/best_params/best_params_supervised.csv` as a new row. If there is a line in the file with a matching dataset/net combination, then you can run `./models/train_model.py` using the best parameters without setting the best parameters as arguments.
 You can also choose to set the best parameters as arguments when running the code.
 
-# Built-in datasets
+# Built-in Datasets
 
 This framework allows users to use real-world datasets as follows:
   | Dataset                                                 | # Nodes | # Edges |
