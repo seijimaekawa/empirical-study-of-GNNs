@@ -63,6 +63,7 @@ You can also choose to set the best parameters as arguments when running the cod
 
 # Built-in datasets
 
+This framework allows users to use real-world datasets as follows:
   | Dataset                                                 | # Nodes | # Edges |
   | ------------------------------------------------------- | ------- | ------- |
   | [Cora](https://github.com/kimiyoung/planetoid)          | 2,708   | 5,278   |
@@ -77,3 +78,5 @@ You can also choose to set the best parameters as arguments when running the cod
   | [BlogCatalog](http://snap.stanford.edu/node2vec/)       | 5,196   | 343,486 |
   | [Flickr](https://arxiv.org/abs/2009.00826)              | 7,575   | 479,476 |
   | [Wiki](https://github.com/GRAND-Lab/MGAE)               | 2,405   | 17,981  |
+
+By changing `--dataset [dataset name]`, users can choose a dataset. 
