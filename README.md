@@ -4,7 +4,7 @@
 
 [GCN](https://github.com/tkipf/pygcn), MLP, [GAT](https://github.com/PetarV-/GAT), [GraphSAGE](http://snap.stanford.edu/graphsage/), [ChebNet](https://arxiv.org/abs/1606.09375), [SGC](https://arxiv.org/abs/1902.07153), [H2GCN](https://arxiv.org/abs/2006.11468), [MoNet](https://arxiv.org/abs/1611.08402), [GPRGNN](https://github.com/jianhao2016/GPRGNN), [FSGNN](https://arxiv.org/abs/2105.07634), [JK-GCN](https://arxiv.org/abs/1806.03536),[JK-GAT](https://arxiv.org/abs/1806.03536), [JK-GraphSAGE](https://arxiv.org/abs/1806.03536), [GraphSAINT-GAT](https://arxiv.org/abs/1907.04931), [GraphSAINT-GraphSAGE](https://arxiv.org/abs/1907.04931), [Shadow-GAT](https://github.com/facebookresearch/shaDow_GNN), [Shadow-GraphSAGE](https://github.com/facebookresearch/shaDow_GNN)
 
-# Dataset Generation (GenCAT)
+# Dataset Generation ([GenCAT](https://arxiv.org/abs/2109.04639))
 
 Choose a base dataset and Generate dataset with GenCAT. If the base dataset is not in your directory, it will be downloaded automatically.
 Dataset generated with pre-set parameters will be saved under the `data` directory.
