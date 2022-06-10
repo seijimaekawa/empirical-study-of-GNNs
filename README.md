@@ -16,6 +16,16 @@ python scripts/run_gencat.py --dataset cora
 You can download synthetic datasets that we use in the paper: 
 [dataset link](https://drive.google.com/file/d/1B7X65BoPij8sEmL491T-LDlzrm5aATRH/view?usp=sharing)
 
+# Reproduction of Experiments in the Paper
+All plots in Figure 1-6 are shown in a [notebook](https://github.com/seijimaekawa/empirical-study-of-GNNs/blob/main/notebooks/final_plots.ipynb). 
+
+The raw experimental results are stored in [csv-formated files](https://github.com/seijimaekawa/empirical-study-of-GNNs/tree/main/notebooks/final_results). 
+
+## Hyperparameters
+The hyperparameter search space for each model is listed in [json files](https://github.com/seijimaekawa/empirical-study-of-GNNs/tree/main/configs/parameter_search)
+
+Also, we show the [best parameter sets](https://github.com/seijimaekawa/empirical-study-of-GNNs/tree/main/configs/best_params/full_hyperparameter_search) used for the experiments.
+
 # Run GNN
 
 If the base dataset is not in your directory, it will be downloaded automatically.
