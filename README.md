@@ -14,9 +14,9 @@ python scripts/run_gencat.py --dataset cora
 ```
 
 You can download synthetic datasets that we use in the paper: 
-[dataset link](https://drive.google.com/file/d/1B7X65BoPij8sEmL491T-LDlzrm5aATRH/view?usp=sharing)
+[dataset link](https://drive.google.com/file/d/1B7X65BoPij8sEmL491T-LDlzrm5aATRH/view?usp=sharing) to Google Drive. 
 
-Please put the unzipped folder as `./data/`.
+Please put the unzipped folder as `./data/` after downloading it.
 
 # Reproduction of Experiments in the Paper
 All plots in Figure 1-6 are shown in a [notebook](https://github.com/seijimaekawa/empirical-study-of-GNNs/blob/main/notebooks/final_plots.ipynb). 
@@ -80,10 +80,10 @@ This framework allows users to use real-world datasets as follows:
   | Dataset                                                 | # Nodes | # Edges |
   | ------------------------------------------------------- | ------- | ------- |
   | [Cora](https://github.com/kimiyoung/planetoid)          | 2,708   | 5,278   |
-  | [Citeseer](https://github.com/kimiyoung/planetoid)      | 3,327   | 4,552   |
   | [Pubmed](https://github.com/kimiyoung/planetoid)        | 19,717  | 44,324  |
-  | [Cornell](https://openreview.net/forum?id=S1e2agrFvS)   | 183     | 277     |
+  | [Citeseer](https://github.com/kimiyoung/planetoid)      | 3,327   | 4,552   |
   | [Texas](https://openreview.net/forum?id=S1e2agrFvS)     | 183     | 279     |
+  | [Cornell](https://openreview.net/forum?id=S1e2agrFvS)   | 183     | 277     |
   | [Wisconsin](https://openreview.net/forum?id=S1e2agrFvS) | 251     | 499     |
   | [Actor](https://openreview.net/forum?id=S1e2agrFvS)     | 7,600   | 26,659  |
   | [Chameleon](https://arxiv.org/abs/1909.13021)           | 2,277   | 31,371  |
