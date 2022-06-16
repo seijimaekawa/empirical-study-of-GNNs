@@ -89,12 +89,12 @@ This framework allows users to use real-world datasets as follows:
   | [Cora](https://github.com/kimiyoung/planetoid)          | 2,708   | 5,278   |
   | [Pubmed](https://github.com/kimiyoung/planetoid)        | 19,717  | 44,324  |
   | [Citeseer](https://github.com/kimiyoung/planetoid)      | 3,327   | 4,552   |
-  | [Texas](https://openreview.net/forum?id=S1e2agrFvS)     | 183     | 279     |
-  | [Cornell](https://openreview.net/forum?id=S1e2agrFvS)   | 183     | 277     |
-  | [Wisconsin](https://openreview.net/forum?id=S1e2agrFvS) | 251     | 499     |
-  | [Actor](https://openreview.net/forum?id=S1e2agrFvS)     | 7,600   | 26,659  |
-  | [Chameleon](https://arxiv.org/abs/1909.13021)           | 2,277   | 31,371  |
-  | [Squirrel](https://arxiv.org/abs/1909.13021)            | 5,201   | 198,353 |
+  | [Texas](https://openreview.net/forum?id=S1e2agrFvS)     | 183     | 295     |
+  | [Wisconsin](https://openreview.net/forum?id=S1e2agrFvS) | 251     | 466     |
+  | [Cornell](https://openreview.net/forum?id=S1e2agrFvS)   | 183     | 280     |
+  | [Actor](https://openreview.net/forum?id=S1e2agrFvS)     | 7,600   | 26,752  |
+  | [Chameleon](https://arxiv.org/abs/1909.13021)           | 2,277   | 31,421  |
+  | [Squirrel](https://arxiv.org/abs/1909.13021)            | 5,200   | 198,493 |
   | [BlogCatalog](http://snap.stanford.edu/node2vec/)       | 5,196   | 343,486 |
   | [Flickr](https://arxiv.org/abs/2009.00826)              | 7,575   | 479,476 |
   | [Wiki](https://github.com/GRAND-Lab/MGAE)               | 2,405   | 17,981  |
