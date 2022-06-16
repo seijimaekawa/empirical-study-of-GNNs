@@ -1,7 +1,3 @@
-#! /usr/bin/env python
-# -*- coding: utf-8 -*-
-# vim:fenc=utf-8
-
 import os
 import sys
 import pickle
@@ -46,7 +42,6 @@ class WebKB2(InMemoryDataset):
             transformed version. The data object will be transformed before
             being saved to disk. (default: :obj:`None`)
 
-    →WebKBクラスを、改変。インプットの形式、パスを変更する
     """
 
     url = ('https://raw.githubusercontent.com/graphdml-uiuc-jlu/geom-gcn/'
@@ -93,7 +88,9 @@ class WebKB2(InMemoryDataset):
         y_test = read_file(f"{self.root}/{self.name}/{self.name}/raw/", self.name, "ty")
 
         x = torch.cat((x_train, x_test), 0)
-        y = torch.cat((y_train, y_test), 0).argmax(dim=1)  # classの数だけ次元があったのを１次元にした
+        # The number of dimensions was reduced from as many as the number of
+        # classes to one dimension.
+        y = torch.cat((y_train, y_test), 0).argmax(dim=1)
 
         graph = read_file(f"{self.root}/{self.name}/{self.name}/raw/", self.name, "graph")
 
@@ -210,7 +207,7 @@ class Planetoid2(InMemoryDataset):
         pass
 
     def process(self):
-        data = read_planetoid_data2(self.raw_dir, self.name)  # この中でvalのスプリット行われている
+        data = read_planetoid_data2(self.raw_dir, self.name)
         data = data if self.pre_transform is None else self.pre_transform(data)
         torch.save(self.collate([data]), self.processed_paths[0])
 
@@ -375,7 +372,9 @@ class WikipediaNetwork2(InMemoryDataset):
             y_test = read_file(f"{self.root}/{self.name}/{self.name}/raw/", self.name, "ty")
 
             x = torch.cat((x_train, x_test), 0)
-            y = torch.cat((y_train, y_test), 0).argmax(dim=1)  # classの数だけ次元があったのを１次元にした
+            # The number of dimensions was reduced from as many as the number of
+            # classes to one dimension.
+            y = torch.cat((y_train, y_test), 0).argmax(dim=1)
 
             graph = read_file(f"{self.root}/{self.name}/{self.name}/raw/", self.name, "graph")
 
@@ -590,7 +589,9 @@ class AttributedGraphDataset2(InMemoryDataset):
         y_test = read_file(f"{self.root}/{self.name}/{self.name}/raw/", self.name, "ty")
 
         x = torch.cat((x_train, x_test), 0)
-        y = torch.cat((y_train, y_test), 0).argmax(dim=1)  # classの数だけ次元があったのを１次元にした
+        # The number of dimensions was reduced from as many as the number of
+        # classes to one dimension.
+        y = torch.cat((y_train, y_test), 0).argmax(dim=1)
 
         graph = read_file(f"{self.root}/{self.name}/{self.name}/raw/", self.name, "graph")
 
@@ -667,7 +668,9 @@ class Actor2(InMemoryDataset):
             y_test = read_file(f"{self.root}/{self.name}/{self.name}/raw/", self.name, "ty")
 
             x = torch.cat((x_train, x_test), 0)
-            y = torch.cat((y_train, y_test), 0).argmax(dim=1)  # classの数だけ次元があったのを１次元にした
+            # The number of dimensions was reduced from as many as the number of
+            # classes to one dimension.
+            y = torch.cat((y_train, y_test), 0).argmax(dim=1)
 
             graph = read_file(f"{self.root}/{self.name}/{self.name}/raw/", self.name, "graph")
 
@@ -692,7 +695,7 @@ class Actor2(InMemoryDataset):
 
 def read_file(folder, prefix, name):
     """
-    planetoidの中にあったがimportできないようになっていたので直接コピーした
+    copied from the following repository
     https://github.com/pyg-team/pytorch_geometric/blob/614e3a6402a542bfdd0b9ecf4ec37607b4b61756/torch_geometric/io/planetoid.py#L17
     """
     path = osp.join(folder, 'ind.{}.{}'.format(prefix, name))
@@ -716,7 +719,7 @@ def read_file(folder, prefix, name):
 
 def edge_index_from_dict(graph_dict, num_nodes=None, do_coalesce=True):
     """
-    planetoidの中にあったがimportできないようになっていたので直接コピーした
+    copied from the pytorch_geometric repository
     """
     row, col = [], []
     for key, value in graph_dict.items():
@@ -735,7 +738,7 @@ def edge_index_from_dict(graph_dict, num_nodes=None, do_coalesce=True):
 
 def index_to_mask(index, size):
     """
-    planetoidの中にあったがimportできないようになっていたので直接コピーした
+    copied from the pytorch_geometric repository
     """
     mask = torch.zeros((size, ), dtype=torch.bool)
     mask[index] = 1
