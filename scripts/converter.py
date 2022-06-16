@@ -24,7 +24,7 @@ def convert_to_planetoid(dataset):
         raise ValueError("conversion not allowed")
 
     data = DataLoader(dataset, data_dir="./data/")[0]
-    adj, features, labels = convert_pt_data_into_three_component(data)  # save_graphに合わせるため
+    adj, features, labels = convert_pt_data_into_three_component(data)
     print(type(adj))  # <class 'scipy.sparse.csr.csr_matrix'>
     print(adj.shape)  # (n_data, n_data)
     print(type(features))  # <class 'numpy.ndarray'>
@@ -41,7 +41,6 @@ def convert_to_npz(dataset):
     from models.dataset_utils import DataLoader
     data = DataLoader(dataset, data_dir="./data/")[0]
 
-    # まずnp.ndarrayに変換
     x = data.x.numpy()
     edge_index = data.edge_index.numpy()
     y = data.y.numpy()
@@ -89,7 +88,6 @@ def save_semb(dataset, edge_index, y):
     path_label = f'{save_dir}{dataset}_label.txt'
     path_edge = f'{save_dir}{dataset}.edgelist'
 
-    # pd.DataFrameに変換してからテキスト形式で保存
     df_label = pd.DataFrame({"label": y})
     df_label.to_csv(path_label, sep=" ", header=False)
     df_edge = pd.DataFrame(edge_index.T)

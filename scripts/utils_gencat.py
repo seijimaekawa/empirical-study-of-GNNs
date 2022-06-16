@@ -83,7 +83,7 @@ def calc_class_features(S, k, Label):
         pref_tmp = np.array(pref_tmp).transpose()
         for h in range(k):
             class_pref_mean[i, h] = mean(pref_tmp[h])
-            if len(pref_tmp[h]) > 1:  # 1件しかないクラスがある場合を回避
+            if len(pref_tmp[h]) > 1:
                 class_pref_dev[i, h] = stdev(pref_tmp[h])
             else:
                 class_pref_dev[i, h] = 0
