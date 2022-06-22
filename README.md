@@ -97,6 +97,5 @@ This framework allows users to use real-world datasets as follows:
   | [Squirrel](https://arxiv.org/abs/1909.13021)            | 5,200   | 198,493 |
   | [BlogCatalog](http://snap.stanford.edu/node2vec/)       | 5,196   | 343,486 |
   | [Flickr](https://arxiv.org/abs/2009.00826)              | 7,575   | 479,476 |
-  | [Wiki](https://github.com/GRAND-Lab/MGAE)               | 2,405   | 17,981  |
 
 By changing `--dataset [dataset name]`, users can choose a dataset. 
