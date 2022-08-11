@@ -12,10 +12,26 @@ Dataset generated with pre-set parameters will be saved under the `data` directo
 
 ```
 python scripts/run_gencat.py --dataset cora
+
+# To reproduce sythetic datasets for Section 6.1.1 (various class size distributions)
+python scripts/run_gencat.py --dataset cora --exp classsize
+ 
+# To reproduce sythetic datasets for Section 6.1.2 (various edge connection proportions between classes)
+python scripts/run_gencat.py --dataset cora --exp hetero_homo
+
+# To reproduce sythetic datasets for Section 6.1.3 (various attributes)
+python scripts/run_gencat.py --dataset cora --exp attribute
+
+# To reproduce sythetic datasets for Section 6.1.4 (various numbers of nodes and edges)
+python scripts/run_gencat.py --dataset cora --exp scalability_node_edge
+
+# To reproduce sythetic datasets for Section 6.2 (various numbers of edges)
+python scripts/run_gencat.py --dataset cora --exp scalability_edge
 ```
 
+
 You can download synthetic datasets that we use in the paper: 
-[dataset link](https://drive.google.com/file/d/1B7X65BoPij8sEmL491T-LDlzrm5aATRH/view?usp=sharing) to Google Drive. 
+[dataset link](https://drive.google.com/file/d/1JedynF0F-JJgCFBS4CYF-DqPZXuOcJSh/view?usp=sharing) to Google Drive. 
 
 Please put the unzipped folder as `./data/` after downloading it.
 
