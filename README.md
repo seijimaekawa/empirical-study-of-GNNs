@@ -29,8 +29,8 @@ python scripts/run_gencat.py --dataset cora --exp scalability_node_edge
 python scripts/run_gencat.py --dataset cora --exp scalability_edge
 ```
 
-
-You can download synthetic datasets that we use in the paper: 
+### [Optional] Already Generated Dataset Link
+If you do not want to generate, you can download synthetic datasets that we use in the paper: 
 [dataset link](https://drive.google.com/file/d/1JedynF0F-JJgCFBS4CYF-DqPZXuOcJSh/view?usp=sharing) to Google Drive. 
 
 Please put the unzipped folder as `./data/` after downloading it.
