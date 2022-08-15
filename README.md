@@ -31,7 +31,7 @@ python scripts/run_gencat.py --dataset cora --exp scalability_edge
 
 ### [Optional] Already Generated Dataset Link
 If you do not want to generate, you can download synthetic datasets that we use in the paper: 
-[dataset link](https://drive.google.com/file/d/1JedynF0F-JJgCFBS4CYF-DqPZXuOcJSh/view?usp=sharing) to Google Drive. 
+[Google Drive](https://drive.google.com/file/d/1JedynF0F-JJgCFBS4CYF-DqPZXuOcJSh/view?usp=sharing) or [Our Lab Repository](http://www-bigdata.ist.osaka-u.ac.jp/ja/download?name=Experiment_Data_zip) (These links provide the same dataset). 
 
 Please put the unzipped folder as `./data/` after downloading it.
 
