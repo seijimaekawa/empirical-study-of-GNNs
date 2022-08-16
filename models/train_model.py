@@ -14,7 +14,7 @@ from torch_geometric.loader import GraphSAINTRandomWalkSampler, ShaDowKHopSample
 
 from dataset_utils import DataLoader
 from utils import random_planetoid_splits, hgcn_precompute, fix_seed, sgc_precompute, monet_precompute, fsgnn_precompute, mixhop_precompute
-from GNN_models import GCN_Net, GAT_Net, APPNP_Net, ChebNet, GPRGNN, GraphSAGENet, GINNet, SGC, MixHopNetwork, H2GCN, MLPNet, MoNet, FSGNN, Shadow_GAT, Shadow_GraphSAGE
+from GNN_models import GCN_Net, GAT_Net, APPNP_Net, ChebNet, GPRGNN, GraphSAGENet, GINNet, SGC, MixHopNetwork, H2GCN, MLPNet, MoNet, FSGNN, Shadow_GAT, Shadow_GraphSAGE, LINKX
 
 os.environ["COMET_DISABLE_AUTO_LOGGING"] = "1"
 DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
@@ -40,7 +40,8 @@ net_dict = {"GCN": GCN_Net,
             "JK-GAT": GAT_Net,
             "JK-GraphSAGE": GraphSAGENet,
             "Shadow-GAT": Shadow_GAT,
-            "Shadow-GraphSAGE": Shadow_GraphSAGE
+            "Shadow-GraphSAGE": Shadow_GraphSAGE,
+            "LINKX": LINKX
             }
 
 
@@ -457,7 +458,8 @@ if __name__ == '__main__':
                             "GraphSAINT-GAT",
                             "GraphSAINT-GraphSAGE",
                             "Shadow-GAT",
-                            "Shadow-GraphSAGE"],
+                            "Shadow-GraphSAGE",
+                            "LINKX"],
                         )
     parser.add_argument('--JK', type=str, default='last',
                         choices=['last', 'cat', 'max', 'lstm'])
@@ -493,6 +495,12 @@ if __name__ == '__main__':
     parser.add_argument('--att_weight_decay', type=float, default=0.01)  # FSGNN
 
     parser.add_argument('--full_search_params', action='store_true')
+
+    parser.add_argument('--num_edge_layers', type=int, default=2)   # LINKX
+    parser.add_argument('--num_node_layers', type=int, default=2)   # LINKX
+
+    # supplementary experiment
+    parser.add_argument('--supplementary', action='store_true')
 
     args = parser.parse_args()
     d = vars(args)
@@ -534,17 +542,29 @@ if __name__ == '__main__':
         # if there exist, you can use best parameter set.
         try:
             best_params_dir = "../configs/best_params"
-            if args.train_rate == 0.6:
-                split_type = "supervised"
-            elif args.train_rate == 0.025:
-                split_type = "semisupervised"
+            # if args.train_rate == 0.6:
+            #     split_type = "supervised"
+            # elif args.train_rate == 0.025:
+            #     split_type = "semisupervised"
+            split_type = "supervised"
             best_params_file = f"{best_params_dir}/best_params_{split_type}"
 
             # if "scalability" in args.exp or args.conditional:
             #     df = pd.read_csv(f"{best_params_file}_conditional.csv")
             if args.full_search_params:
-                df = pd.read_csv(
-                    f"{best_params_dir}/full_hyperparameter_search/best_params_supervised_f1macro.csv")
+                if not args.supplementary:
+                    #  use the best parameters that maximized f1-macro
+                    df = pd.read_csv(
+                        f"{best_params_dir}/full_hyperparameter_search/best_params_supervised_f1macro.csv")
+                    # df = pd.read_csv(
+                    #     f"{best_params_dir}/full_hyperparameter_search/best_params_supervised_f1macro_openreview.csv")
+                else:
+                    #  use the best parameters that maximized accuracy
+                    print("supplementary experiment")
+                    df = pd.read_csv(
+                        f"{best_params_dir}/full_hyperparameter_search/best_params_supervised_accuracy.csv")
+                    # df = pd.read_csv(
+                    #     f"{best_params_dir}/full_hyperparameter_search/best_params_supervised_accuracy_openreview.csv")
 
                 df = df.query("exp == @args.exp")
             else:
@@ -558,7 +578,15 @@ if __name__ == '__main__':
                 dataset = args.dataset.split("_")[1] if "GenCAT" in args.dataset else args.dataset
             net = args.net.split("-")[1] if "JK-" in args.net else args.net
             print(dataset)
-            df = df.query("net == @args.net & dataset == @dataset").reset_index()
+
+            if ("GenCAT_cora_60000_100000" in args.dataset) or (
+                    "GenCAT_cora_120000_200000" in args.dataset):
+                print("use best parameters tuned for GenCAT_cora_15000_25000_0 dataset")
+                df = df.query(
+                    "net == @args.net & dataset == 'GenCAT_cora_15000_25000_0'").reset_index()
+            else:
+                df = df.query("net == @args.net & dataset == @dataset").reset_index()
+
             if not df.empty:
                 print("best params found!")
                 config_model_path = f"../configs/parameter_search/{net}.json"

@@ -1,14 +1,12 @@
 import numpy as np
 import torch
 import torch.nn.functional as F
-
-from torch.nn import Parameter
-from torch.nn import Linear, ModuleList, ReLU
+from torch.nn import Parameter, Linear, ModuleList, ReLU, BatchNorm1d, Parameter
 from torch_geometric.nn.conv.gcn_conv import gcn_norm
 from torch_geometric.nn import ChebConv, GMMConv, global_mean_pool, MessagePassing, APPNP
 from torch_geometric.nn.models import GraphSAGE, GIN, GAT, GCN
 
-from layers import SparseNGCNLayer, ListModule, DenseNGCNLayer
+from layers import SparseNGCNLayer, ListModule, DenseNGCNLayer, SparseLinear, MLP
 DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 
@@ -518,3 +516,130 @@ class FSGNN(torch.nn.Module):
         out = self.fc2(out)
 
         return F.log_softmax(out, dim=1)
+
+
+class LINKX(torch.nn.Module):
+    r"""The LINKX model from the `"Large Scale Learning on Non-Homophilous
+    Graphs: New Benchmarks and Strong Simple Methods"
+    <https://arxiv.org/abs/2110.14446>`_ paper
+
+    .. math::
+        \mathbf{H}_{\mathbf{A}} &= \textrm{MLP}_{\mathbf{A}}(\mathbf{A})
+
+        \mathbf{H}_{\mathbf{X}} &= \textrm{MLP}_{\mathbf{X}}(\mathbf{X})
+
+        \mathbf{Y} &= \textrm{MLP}_{f} \left( \sigma \left( \mathbf{W}
+        [\mathbf{H}_{\mathbf{A}}, \mathbf{H}_{\mathbf{X}}] +
+        \mathbf{H}_{\mathbf{A}} + \mathbf{H}_{\mathbf{X}} \right) \right)
+
+    .. note::
+
+        For an example of using LINKX, see `examples/linkx.py <https://
+        github.com/pyg-team/pytorch_geometric/blob/master/examples/linkx.py>`_.
+
+    Args:
+        num_nodes (int): The number of nodes in the graph.
+        in_channels (int): Size of each input sample, or :obj:`-1` to derive
+            the size from the first input(s) to the forward method.
+        hidden_channels (int): Size of each hidden sample.
+        out_channels (int): Size of each output sample.
+        num_layers (int): Number of layers of :math:`\textrm{MLP}_{f}`.
+        num_edge_layers (int): Number of layers of
+            :math:`\textrm{MLP}_{\mathbf{A}}`. (default: :obj:`1`)
+        num_node_layers (int): Number of layers of
+            :math:`\textrm{MLP}_{\mathbf{X}}`. (default: :obj:`1`)
+        dropout (float, optional): Dropout probability of each hidden
+            embedding. (default: :obj:`0.`)
+    """
+
+    def __init__(self, dataset, args):
+        super(LINKX, self).__init__()
+
+        self.num_nodes = dataset[0].num_nodes
+        self.in_channels = dataset.num_features
+        self.out_channels = dataset.num_classes
+        self.num_edge_layers = args.num_edge_layers
+
+        hidden_channels = int(args.hidden)
+
+        self.edge_lin = SparseLinear(dataset[0].num_nodes, hidden_channels)
+        if self.num_edge_layers > 1:
+            self.edge_norm = BatchNorm1d(hidden_channels)
+            channels = [hidden_channels] * args.num_edge_layers
+            self.edge_mlp = MLP(channels, dropout=0., act_first=True)
+
+        channels = [self.in_channels] + [hidden_channels] * args.num_node_layers
+        self.node_mlp = MLP(channels, dropout=0., act_first=True)
+
+        self.cat_lin1 = torch.nn.Linear(hidden_channels, hidden_channels)
+        self.cat_lin2 = torch.nn.Linear(hidden_channels, hidden_channels)
+
+        channels = [hidden_channels] * args.layers + [self.out_channels]
+        self.final_mlp = MLP(channels, dropout=float(args.dropout), act_first=True)
+
+        self.reset_parameters()
+
+    # def __init__(self, num_nodes: int, in_channels: int, hidden_channels: int,
+    #              out_channels: int, num_layers: int, num_edge_layers: int = 1,
+    #              num_node_layers: int = 1, dropout: float = 0.):
+    #     super().__init__()
+
+    #     self.num_nodes = num_nodes
+    #     self.in_channels = in_channels
+    #     self.out_channels = out_channels
+    #     self.num_edge_layers = num_edge_layers
+
+    #     self.edge_lin = SparseLinear(num_nodes, hidden_channels)
+    #     if self.num_edge_layers > 1:
+    #         self.edge_norm = BatchNorm1d(hidden_channels)
+    #         channels = [hidden_channels] * num_edge_layers
+    #         self.edge_mlp = MLP(channels, dropout=0., act_first=True)
+
+    #     channels = [in_channels] + [hidden_channels] * num_node_layers
+    #     self.node_mlp = MLP(channels, dropout=0., act_first=True)
+
+    #     self.cat_lin1 = torch.nn.Linear(hidden_channels, hidden_channels)
+    #     self.cat_lin2 = torch.nn.Linear(hidden_channels, hidden_channels)
+
+    #     channels = [hidden_channels] * num_layers + [out_channels]
+    #     self.final_mlp = MLP(channels, dropout=dropout, act_first=True)
+
+    #     self.reset_parameters()
+
+    def reset_parameters(self):
+        self.edge_lin.reset_parameters()
+        if self.num_edge_layers > 1:
+            self.edge_norm.reset_parameters()
+            self.edge_mlp.reset_parameters()
+        self.node_mlp.reset_parameters()
+        self.cat_lin1.reset_parameters()
+        self.cat_lin2.reset_parameters()
+        self.final_mlp.reset_parameters()
+
+    # def forward(self, x: OptTensor, edge_index: Adj,
+    #             edge_weight: OptTensor = None) -> Tensor:
+    def forward(self, data):
+        """"""
+        x, edge_index, edge_weight = data.x, data.edge_index, None
+
+        out = self.edge_lin(edge_index, edge_weight)
+        if self.num_edge_layers > 1:
+            out = out.relu_()
+            out = self.edge_norm(out)
+            out = self.edge_mlp(out)
+
+        out = out + self.cat_lin1(out)
+
+        if x is not None:
+            x = self.node_mlp(x)
+            out += x
+            out += self.cat_lin2(x)
+
+        out = self.final_mlp(out.relu_())
+        # return self.final_mlp(out.relu_())
+        return F.log_softmax(out, dim=1)
+
+    def __repr__(self) -> str:
+        return (f'{self.__class__.__name__}(num_nodes={self.num_nodes}, '
+                f'in_channels={self.in_channels}, '
+                f'out_channels={self.out_channels})')
