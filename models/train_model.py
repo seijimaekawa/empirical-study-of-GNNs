@@ -556,15 +556,12 @@ if __name__ == '__main__':
                     #  use the best parameters that maximized f1-macro
                     df = pd.read_csv(
                         f"{best_params_dir}/full_hyperparameter_search/best_params_supervised_f1macro.csv")
-                    # df = pd.read_csv(
-                    #     f"{best_params_dir}/full_hyperparameter_search/best_params_supervised_f1macro_openreview.csv")
+
                 else:
                     #  use the best parameters that maximized accuracy
                     print("supplementary experiment")
                     df = pd.read_csv(
                         f"{best_params_dir}/full_hyperparameter_search/best_params_supervised_accuracy.csv")
-                    # df = pd.read_csv(
-                    #     f"{best_params_dir}/full_hyperparameter_search/best_params_supervised_accuracy_openreview.csv")
 
                 df = df.query("exp == @args.exp")
             else:

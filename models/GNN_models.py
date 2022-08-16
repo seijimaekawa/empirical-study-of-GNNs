@@ -579,33 +579,6 @@ class LINKX(torch.nn.Module):
 
         self.reset_parameters()
 
-    # def __init__(self, num_nodes: int, in_channels: int, hidden_channels: int,
-    #              out_channels: int, num_layers: int, num_edge_layers: int = 1,
-    #              num_node_layers: int = 1, dropout: float = 0.):
-    #     super().__init__()
-
-    #     self.num_nodes = num_nodes
-    #     self.in_channels = in_channels
-    #     self.out_channels = out_channels
-    #     self.num_edge_layers = num_edge_layers
-
-    #     self.edge_lin = SparseLinear(num_nodes, hidden_channels)
-    #     if self.num_edge_layers > 1:
-    #         self.edge_norm = BatchNorm1d(hidden_channels)
-    #         channels = [hidden_channels] * num_edge_layers
-    #         self.edge_mlp = MLP(channels, dropout=0., act_first=True)
-
-    #     channels = [in_channels] + [hidden_channels] * num_node_layers
-    #     self.node_mlp = MLP(channels, dropout=0., act_first=True)
-
-    #     self.cat_lin1 = torch.nn.Linear(hidden_channels, hidden_channels)
-    #     self.cat_lin2 = torch.nn.Linear(hidden_channels, hidden_channels)
-
-    #     channels = [hidden_channels] * num_layers + [out_channels]
-    #     self.final_mlp = MLP(channels, dropout=dropout, act_first=True)
-
-    #     self.reset_parameters()
-
     def reset_parameters(self):
         self.edge_lin.reset_parameters()
         if self.num_edge_layers > 1:
@@ -616,8 +589,6 @@ class LINKX(torch.nn.Module):
         self.cat_lin2.reset_parameters()
         self.final_mlp.reset_parameters()
 
-    # def forward(self, x: OptTensor, edge_index: Adj,
-    #             edge_weight: OptTensor = None) -> Tensor:
     def forward(self, data):
         """"""
         x, edge_index, edge_weight = data.x, data.edge_index, None

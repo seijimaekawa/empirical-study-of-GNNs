@@ -106,8 +106,7 @@ def main(args):
         # parameters to be changed: n(node), m(edge)
         data_dir = f"{top_dir}/data/GenCAT_Exp_scalability_edge/"
         os.makedirs(data_dir, exist_ok=True)
-        # params = [5000, 10000, 15000, 20000, 25000]  # change edge
-        params = [25000]  # change edge
+        params = [5000, 10000, 15000, 20000, 25000]  # change edge
         n = len(node_degree)
         for m in params:
             for i in range(n_iter):
@@ -129,10 +128,9 @@ def main(args):
         # parameters to be changed: n(node), m(edge)
         data_dir = f"{top_dir}/data/GenCAT_Exp_scalability_node_edge/"
         os.makedirs(data_dir, exist_ok=True)
-        # node_params = [3000, 6000, 9000, 12000, 15000, 60000, 120000]
-        # edge_params = [5000, 10000, 15000, 20000, 25000, 100000, 200000]
-        node_params = [60000, 120000]
-        edge_params = [100000, 200000]
+        node_params = [3000, 6000, 9000, 12000, 15000, 60000, 120000]
+        edge_params = [5000, 10000, 15000, 20000, 25000, 100000, 200000]
+
         for i in range(len(node_params)):
             for j in range(n_iter):
                 adj, features, labels = gencat.gencat(
