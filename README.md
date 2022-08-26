@@ -1,6 +1,8 @@
 # Beyond Real-world Benchmark Datasets: An Empirical Study of Node Classification with GNNs
 Our empirical studies clarify the strengths and weaknesses of GNNs from four major characteristics of real-world graphs with class labels of nodes, i.e., 1) class size distributions (balanced vs. imbalanced), 2) edge connection proportions between classes (homophilic vs. heterophilic), 3) attribute values (biased vs. random), and 4) graph sizes (small vs. large).
 
+All our experiments are executed with Python3.7.
+
 # Supported Models
 
 MLP, [GCN](https://github.com/tkipf/pygcn), [ChebNet](https://arxiv.org/abs/1606.09375), [MoNet](https://arxiv.org/abs/1611.08402), [GAT](https://github.com/PetarV-/GAT),  [SGC](https://arxiv.org/abs/1902.07153), [JK-GCN](https://arxiv.org/abs/1806.03536), [JK-GAT](https://arxiv.org/abs/1806.03536), [JK-GraphSAGE](https://arxiv.org/abs/1806.03536), [GraphSAGE](http://snap.stanford.edu/graphsage/), [GraphSAINT-GAT](https://arxiv.org/abs/1907.04931), [GraphSAINT-GraphSAGE](https://arxiv.org/abs/1907.04931), [Shadow-GAT](https://github.com/facebookresearch/shaDow_GNN), [Shadow-GraphSAGE](https://github.com/facebookresearch/shaDow_GNN), [H2GCN](https://arxiv.org/abs/2006.11468), [FSGNN](https://arxiv.org/abs/2105.07634), [GPRGNN](https://github.com/jianhao2016/GPRGNN), [LINKX](https://github.com/cuai/non-homophily-large-scale)
