@@ -1,3 +1,8 @@
-torch==1.9.1
+torch==1.12.1
 torch-geometric==2.0.1
-powerlaw
+torch-scatter==2.0.9
+torch-sparse==0.6.15
+powerlaw==1.5
+
+# Follow the link below for torch installation instructions.
+# https://pytorch.org/get-started/locally/
