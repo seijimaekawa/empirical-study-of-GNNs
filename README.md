@@ -9,7 +9,9 @@ MLP, [GCN](https://github.com/tkipf/pygcn), [ChebNet](https://arxiv.org/abs/1606
 All our experiments are executed with Python3.7.
 Please run scripts below to prepare an environment for our codebase. 
 
-`pip install torch==1.12.1`
+`pip install torch torchvision torchaudio`
+
+Please see the [official instruction](https://pytorch.org/get-started/locally/) to install pytorch. We use torch==1.12.1. 
 
 `pip install -r requirements.txt`
 
