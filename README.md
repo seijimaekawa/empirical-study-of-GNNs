@@ -1,6 +1,6 @@
 # Beyond Real-world Benchmark Datasets: An Empirical Study of Node Classification with GNNs
 
-This paper is accepted to NeurIPS Datasets and Benchmarks🎉🎉　 [[paper](https://openreview.net/forum?id=bSULxOy3On)]
+This paper is accepted to NeurIPS 2022 Datasets and Benchmarks🎉🎉　 [[paper](https://openreview.net/forum?id=bSULxOy3On)]
 
 Our empirical studies clarify the strengths and weaknesses of GNNs from four major characteristics of real-world graphs with class labels of nodes, i.e., 1) class size distributions (balanced vs. imbalanced), 2) edge connection proportions between classes (homophilic vs. heterophilic), 3) attribute values (biased vs. random), and 4) graph sizes (small vs. large).
 
